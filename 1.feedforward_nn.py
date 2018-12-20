@@ -1,4 +1,5 @@
 """
+In this lesson we prepare simple feedforward neural network
 
 """
 
@@ -10,33 +11,28 @@ import torchvision.transforms as transforms
 
 # Device configuration
 device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
+# Assume that we are on a CUDA machine, then this should print a CUDA device:
+print(f'Working on device={device}')
 
 # Hyper-parameters 
-input_size = 32*32
-hidden_size = 500
+
+# each cifar image is RGB 32x32, so it is an 3D array [3,32,32]
+# we will flatten the image as vector dim=3*32*32 
+input_size = 3*32*32
+
+hidden_size = 128
+# we have 10 classes
+
+classes = ('plane', 'car', 'bird', 'cat',
+           'deer', 'dog', 'frog', 'horse', 'ship', 'truck')
+
 num_classes = 10
-num_epochs = 5
-batch_size = 32
+
+num_epochs = 2
+batch_size = 8
+
 learning_rate = 0.001
 
-# # MNIST dataset 
-# train_dataset = torchvision.datasets.MNIST(root='./data', 
-#                                            train=True, 
-#                                            transform=transforms.ToTensor(),  
-#                                            download=True)
-
-# test_dataset = torchvision.datasets.MNIST(root='./data', 
-#                                           train=False, 
-#                                           transform=transforms.ToTensor())
-
-# # Data loader
-# train_loader = torch.utils.data.DataLoader(dataset=train_dataset, 
-#                                            batch_size=batch_size, 
-#                                            shuffle=True)
-
-# test_loader = torch.utils.data.DataLoader(dataset=test_dataset, 
-#                                           batch_size=batch_size, 
-#                                           shuffle=False)
 
 
 
@@ -47,26 +43,23 @@ transform = transforms.Compose(
 
 trainset = torchvision.datasets.CIFAR10(root='./data', train=True,
                                         download=True, transform=transform)
-trainloader = torch.utils.data.DataLoader(trainset, batch_size=4,
-                                          shuffle=True, num_workers=2)
+train_loader = torch.utils.data.DataLoader(trainset, batch_size=batch_size,
+                                          shuffle=True)
 
 testset = torchvision.datasets.CIFAR10(root='./data', train=False,
                                        download=True, transform=transform)
-testloader = torch.utils.data.DataLoader(testset, batch_size=4,
-                                         shuffle=False, num_workers=2)
-
-classes = ('plane', 'car', 'bird', 'cat',
-           'deer', 'dog', 'frog', 'horse', 'ship', 'truck')
+test_loader = torch.utils.data.DataLoader(testset, batch_size=batch_size,
+                                         shuffle=False)
 
 
-import matplotlib.pyplot as plt
+#import matplotlib.pyplot as plt
 import numpy as np
 
 
 # Fully connected neural network with one hidden layer
 class FeedForwardNeuralNet(nn.Module):
     def __init__(self, input_size, hidden_size, num_classes):
-        super(NeuralNet, self).__init__()
+        super(FeedForwardNeuralNet, self).__init__()
         self.fc1 = nn.Linear(input_size, hidden_size) 
         self.relu = nn.ReLU()
         self.fc2 = nn.Linear(hidden_size, num_classes)  
@@ -77,7 +70,7 @@ class FeedForwardNeuralNet(nn.Module):
         out = self.fc2(out)
         return out
 
-model = NeuralNet(input_size, hidden_size, num_classes).to(device)
+model = FeedForwardNeuralNet(input_size, hidden_size, num_classes).to(device)
 
 # Loss and optimizer
 criterion = nn.CrossEntropyLoss()
@@ -86,9 +79,13 @@ optimizer = torch.optim.Adam(model.parameters(), lr=learning_rate)
 # Train the model
 total_step = len(train_loader)
 for epoch in range(num_epochs):
-    for i, (images, labels) in enumerate(train_loader):  
+    for i, batch_sample in enumerate(train_loader):  
+
+        #print(batch_sample)
+        images, labels = batch_sample
+        
         # Move tensors to the configured device
-        images = images.reshape(-1, 32*32).to(device)
+        images = images.reshape(-1, input_size).to(device)
         labels = labels.to(device)
         
         # Forward pass
@@ -100,9 +97,8 @@ for epoch in range(num_epochs):
         loss.backward()
         optimizer.step()
         
-        if (i+1) % 100 == 0:
-            print ('Epoch [{}/{}], Step [{}/{}], Loss: {:.4f}' 
-                   .format(epoch+1, num_epochs, i+1, total_step, loss.item()))
+        if (i+1) % 1000 == 0:
+            print (f'Epoch [{epoch+1}/{num_epochs}], Step [{i+1}/{total_step}], Loss: {loss.item():.4f}')
 
 # Test the model
 # In test phase, we don't need to compute gradients (for memory efficiency)
@@ -110,14 +106,14 @@ with torch.no_grad():
     correct = 0
     total = 0
     for images, labels in test_loader:
-        images = images.reshape(-1, 28*28).to(device)
+        images = images.reshape(-1, input_size).to(device)
         labels = labels.to(device)
         outputs = model(images)
         _, predicted = torch.max(outputs.data, 1)
         total += labels.size(0)
         correct += (predicted == labels).sum().item()
 
-    print('Accuracy of the network on the 10000 test images: {} %'.format(100 * correct / total))
+    print(f'Accuracy of the network on the 10000 test images: {100 * correct / total}%')
 
 # Save the model checkpoint
-torch.save(model.state_dict(), 'model.ckpt')
+#torch.save(model.state_dict(), 'model.ckpt')
