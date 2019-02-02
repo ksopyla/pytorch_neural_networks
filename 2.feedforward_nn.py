@@ -1,5 +1,5 @@
 """
-In this lesson we prepare simple feedforward neural network
+In this lesson we prepare feedforward neural network with 2 hidden layers
 
 """
 import torch
@@ -15,7 +15,7 @@ print(f'Working on device={device}')
 
 # Hyper-parameters 
 
-# each CIFAR image is RGB 32x32, so it is an 3D array [3,32,32]
+# each cifar image is RGB 32x32, so it is an 3D array [3,32,32]
 # we will flatten the image as vector dim=3*32*32 
 input_size = 3*32*32
 
@@ -51,51 +51,36 @@ test_loader = torch.utils.data.DataLoader(testset, batch_size=batch_size,
 import numpy as np
 
 
-
+# Fully connected neural network with one hidden layer
 class FeedForwardNeuralNet(nn.Module):
     def __init__(self, input_size, hidden_size, num_classes):
-        '''
-        Fully connected neural network with one hidden layer
-        '''
         super(FeedForwardNeuralNet, self).__init__()
-
-        # first hidden layer
         self.fc1 = nn.Linear(input_size, hidden_size) 
-        # activation function
         self.relu = nn.ReLU()
-        # output layer
-        self.output = nn.Linear(hidden_size, num_classes) 
+        self.fc11 = nn.Linear(hidden_size, hidden_size) 
+        self.fc2 = nn.Linear(hidden_size, num_classes) 
 
     
     def forward(self, x):
-        '''
-        This method takes an input x and layer after layer compute network states.
-        Last layer gives us predictions.
-        '''
-        state = self.fc1(x)
-        state = self.relu(state)
-        state = self.output(state)
+        out = self.fc1(x)
+        out = self.relu(out)
+        
+        out = self.fc11(out)
+        out = self.relu(out)
+        
+        out = self.fc2(out)
         #out = self.softmax(out)
-        return state
+        return out
 
 model = FeedForwardNeuralNet(input_size, hidden_size, num_classes).to(device)
 
-# Loss function, 
+# Loss and optimizer
 criterion = nn.CrossEntropyLoss()
-
-# Optimizer define how we will chanage model weights
 optimizer = torch.optim.Adam(model.parameters(), lr=learning_rate)  
 
-# Train the model - training loop
+# Train the model
 total_step = len(train_loader)
-
-# set our model in the training mode
-model.train()
 for epoch in range(num_epochs):
-    
-    # data loop, iterate over chunk of data(batch) eg. 32 elements
-    # compute model prediction
-    # update weights 
     for i, batch_sample in enumerate(train_loader):  
 
         #print(batch_sample)
@@ -105,15 +90,12 @@ for epoch in range(num_epochs):
         images = images.reshape(-1, input_size).to(device)
         labels = labels.to(device)
         
-        # Forward pass, compute prediction, 
-        # method 'forward' is automatically called
-        prediction = model(images)
-        # Compute loss, quantify how wrong our predictions are
-        # small loss means a small error
-        loss = criterion(prediction, labels)
+        # Forward pass
+        outputs = model(images)
+        loss = criterion(outputs, labels)
         
         # Backward and optimize
-        model.zero_grad()
+        optimizer.zero_grad()
         loss.backward()
         optimizer.step()
         
@@ -121,9 +103,6 @@ for epoch in range(num_epochs):
             print (f'Epoch [{epoch+1}/{num_epochs}], Step [{i+1}/{total_step}], Loss: {loss.item():.4f}')
 
 # Test the model
-
-# set our model in the training mode
-model.eval()
 # In test phase, we don't need to compute gradients (for memory efficiency)
 with torch.no_grad():
     correct = 0
