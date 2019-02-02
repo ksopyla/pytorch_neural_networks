@@ -1,5 +1,5 @@
 """
-In this lesson we prepare feedforward neural network with 2 hidden layers
+In this lesson we prepare feedforward neural network with 3 hidden layers
 
 """
 import torch
@@ -51,28 +51,53 @@ test_loader = torch.utils.data.DataLoader(testset, batch_size=batch_size,
 import numpy as np
 
 
-# Fully connected neural network with one hidden layer
-class FeedForwardNeuralNet(nn.Module):
-    def __init__(self, input_size, hidden_size, num_classes):
-        super(FeedForwardNeuralNet, self).__init__()
-        self.fc1 = nn.Linear(input_size, hidden_size) 
-        self.relu = nn.ReLU()
-        self.fc11 = nn.Linear(hidden_size, hidden_size) 
-        self.fc2 = nn.Linear(hidden_size, num_classes) 
+class MultilayerNeuralNet(nn.Module):
+    def __init__(self, input_size, num_classes):
+        '''
+        Fully connected neural network with 3 hidden layers
+        '''
+        super(MultilayerNeuralNet, self).__init__()
+        
+        # hidden layers sizes, you can play with it as you wish!
+        hidden1 = 512
+        hidden2 = 256
+        hidden3 = 128
+
+        # input to first hidden layer parameters
+        self.fc1 = nn.Linear(input_size, hidden1) 
+        self.relu1 = nn.ReLU()
+
+        # second hidden layer
+        self.fc2 = nn.Linear(hidden1, hidden2) 
+        self.relu2 = nn.ReLU()
+        
+        # third hidden layer
+        self.fc3 = nn.Linear(hidden2, hidden3)
+        self.relu3 = nn.ReLU()
+
+        # last output layer
+        self.output = nn.Linear(hidden3, num_classes) 
 
     
     def forward(self, x):
-        out = self.fc1(x)
-        out = self.relu(out)
-        
-        out = self.fc11(out)
-        out = self.relu(out)
-        
-        out = self.fc2(out)
-        #out = self.softmax(out)
-        return out
+        '''
+        This method takes an input x and layer after layer compute network states.
+        Last layer gives us predictions.
+        '''
+        state = self.fc1(x)
+        state = self.relu1(state)
 
-model = FeedForwardNeuralNet(input_size, hidden_size, num_classes).to(device)
+        state = self.fc2(x)
+        state = self.relu2(state)
+
+        state = self.fc3(x)
+        state = self.relu3(state)
+
+        state = self.output(state)
+        
+        return state
+
+model = MultilayerNeuralNet(input_size, num_classes).to(device)
 
 # Loss and optimizer
 criterion = nn.CrossEntropyLoss()

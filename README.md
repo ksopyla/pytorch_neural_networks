@@ -35,12 +35,26 @@ pipenv install
 
 Network for classifying [CIFAR-10](https://www.cs.toronto.edu/~kriz/cifar.html) images into one of 10 categories: ['plane', 'car', 'bird', 'cat', 'deer', 'dog', 'frog', 'horse', 'ship', 'truck']
 
-
-
-### file: **[1.feedforward_nn.py](https://github.com/ksopyla/pytorch_neural_networks/blob/master/1.feedforward_nn.py)**
-
+### Feedforward neural network with one hidden layer
 We build simple network with 1 hidden layer and output layer. As input we pass raw image pixels as 32x32 vector of numbers.   
 
+File: **[feedforward_1_hid_nn.py](https://github.com/ksopyla/pytorch_neural_networks/blob/master/feedforward_1_hid_nn.py)**
+This model achieve ~ 48% accuracy after 5 epoch.
+
+Sample output
+```
+Epoch [1/20]], Loss: 1.7711 Test acc: 0.4423
+Epoch [2/20]], Loss: 1.6173 Test acc: 0.4663
+Epoch [3/20]], Loss: 1.5349 Test acc: 0.4694
+Epoch [4/20]], Loss: 1.4676 Test acc: 0.4939
+Epoch [5/20]], Loss: 1.4155 Test acc: 0.4846
+```
+
+### Feedforward neural network with three hidden layers
+Analogous to previous model feedforward network with 3 hidden layers and output layer. As input we pass raw image pixels as 32x32 vector of numbers.   
+
+File: **[feedforward_3_hid_nn.py](https://github.com/ksopyla/pytorch_neural_networks/blob/master/feedforward_3_hid_nn.py)**
+This model achieve ~ 47% accuracy.
 
 
 
