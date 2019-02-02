@@ -87,10 +87,10 @@ class MultilayerNeuralNet(nn.Module):
         state = self.fc1(x)
         state = self.relu1(state)
 
-        state = self.fc2(x)
+        state = self.fc2(state)
         state = self.relu2(state)
 
-        state = self.fc3(x)
+        state = self.fc3(state)
         state = self.relu3(state)
 
         state = self.output(state)
@@ -103,44 +103,61 @@ model = MultilayerNeuralNet(input_size, num_classes).to(device)
 criterion = nn.CrossEntropyLoss()
 optimizer = torch.optim.Adam(model.parameters(), lr=learning_rate)  
 
-# Train the model
-total_step = len(train_loader)
+# set our model in the training mode
+model.train()
 for epoch in range(num_epochs):
-    for i, batch_sample in enumerate(train_loader):  
 
-        #print(batch_sample)
+    epoch_loss = 0
+    # data loop, iterate over chunk of data(batch) eg. 32 elements
+    # compute model prediction
+    # update weights
+    for i, batch_sample in enumerate(train_loader):
+
+        # print(batch_sample)
         images, labels = batch_sample
-        
-        # Move tensors to the configured device
+
+        # flatten the image and move to device
         images = images.reshape(-1, input_size).to(device)
         labels = labels.to(device)
-        
-        # Forward pass
-        outputs = model(images)
-        loss = criterion(outputs, labels)
-        
+
+        # Forward pass, compute prediction,
+        # method 'forward' is automatically called
+        prediction = model(images)
+        # Compute loss, quantify how wrong our predictions are
+        # small loss means a small error
+        loss = criterion(prediction, labels)
+        epoch_loss += loss.item()
+
         # Backward and optimize
-        optimizer.zero_grad()
+        model.zero_grad()
         loss.backward()
         optimizer.step()
-        
-        if (i+1) % 1000 == 0:
-            print (f'Epoch [{epoch+1}/{num_epochs}], Step [{i+1}/{total_step}], Loss: {loss.item():.4f}')
 
-# Test the model
-# In test phase, we don't need to compute gradients (for memory efficiency)
-with torch.no_grad():
-    correct = 0
-    total = 0
-    for images, labels in test_loader:
-        images = images.reshape(-1, input_size).to(device)
-        labels = labels.to(device)
-        outputs = model(images)
-        _, predicted = torch.max(outputs.data, 1)
-        total += labels.size(0)
-        correct += (predicted == labels).sum().item()
+    epoch_loss = epoch_loss / len(train_loader)
 
-    print(f'Accuracy of the network on the 10000 test images: {100 * correct / total}%')
+    # Test the model
 
-# Save the model checkpoint
-#torch.save(model.state_dict(), 'model.ckpt')
+    # set our model in the training mode
+    model.eval()
+    # In test phase, we don't need to compute gradients (for memory efficiency)
+    with torch.no_grad():
+        correct = 0
+        total = 0
+
+        for images, labels in test_loader:
+            # reshape image
+            images = images.reshape(-1, input_size).to(device)
+            labels = labels.to(device)
+
+            # predict classes
+            prediction = model(images)
+
+            # compute accuracy
+            _, predicted = torch.max(prediction.data, 1)
+            total += labels.size(0)
+            correct += (predicted == labels).sum().item()
+
+        acc = correct/total
+
+        # Accuracy of the network on the 10000 test images
+        print(f'Epoch [{epoch+1}/{num_epochs}]], Loss: {epoch_loss:.4f} Test acc: {acc}')
