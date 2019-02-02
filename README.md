@@ -60,6 +60,8 @@ This model achieve ~ 47% accuracy.
 
 ## Convolutional neural network 
 
-
+TODO:
 
 ## Recurrent neural network 
+
+TODO:
