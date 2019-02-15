@@ -43,20 +43,27 @@ This model achieve ~ 48% accuracy after 5 epoch.
 
 Sample output
 ```
-Epoch [1/20]], Loss: 1.7711 Test acc: 0.4423
-Epoch [2/20]], Loss: 1.6173 Test acc: 0.4663
-Epoch [3/20]], Loss: 1.5349 Test acc: 0.4694
-Epoch [4/20]], Loss: 1.4676 Test acc: 0.4939
-Epoch [5/20]], Loss: 1.4155 Test acc: 0.4846
+Epoch [1/5]], Loss: 1.7713 Test acc: 0.4423
+Epoch [2/5]], Loss: 1.6124 Test acc: 0.4582
+Epoch [3/5]], Loss: 1.5280 Test acc: 0.466
+Epoch [4/5]], Loss: 1.4640 Test acc: 0.4889
+Epoch [5/5]], Loss: 1.4130 Test acc: 0.4799
 ```
 
 ### Feedforward neural network with three hidden layers
 Analogous to previous model feedforward network with 3 hidden layers and output layer. As input we pass raw image pixels as 32x32 vector of numbers.   
 
 File: **[feedforward_3_hid_nn.py](https://github.com/ksopyla/pytorch_neural_networks/blob/master/feedforward_3_hid_nn.py)**
-This model achieve ~ 47% accuracy.
+This model achieve ~ 51% accuracy after 5 epoch.
 
-
+Sample output
+```
+Epoch [1/5]], Loss: 1.6971 Test acc: 0.4627
+Epoch [2/5]], Loss: 1.4874 Test acc: 0.4947
+Epoch [3/5]], Loss: 1.3887 Test acc: 0.493
+Epoch [4/5]], Loss: 1.3108 Test acc: 0.5144
+Epoch [5/5]], Loss: 1.2406 Test acc: 0.5166
+```
 
 ## Convolutional neural network 
 

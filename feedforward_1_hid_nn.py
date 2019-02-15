@@ -1,12 +1,18 @@
-import numpy as np
 """
 In this lesson we prepare simple feedforward neural network
 
 """
+import numpy as np
 import torch
 import torch.nn as nn
 import torchvision
 import torchvision.transforms as transforms
+
+
+# set random seeds for reproducibility
+torch.manual_seed(12)
+torch.cuda.manual_seed(12)
+np.random.seed(12)
 
 
 # Device configuration
@@ -141,4 +147,5 @@ for epoch in range(num_epochs):
         acc = correct/total
 
         # Accuracy of the network on the 10000 test images
-        print(f'Epoch [{epoch+1}/{num_epochs}]], Loss: {epoch_loss:.4f} Test acc: {acc}')
+        print(
+            f'Epoch [{epoch+1}/{num_epochs}]], Loss: {epoch_loss:.4f} Test acc: {acc}')

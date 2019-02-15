@@ -2,10 +2,18 @@
 In this lesson we prepare feedforward neural network with 3 hidden layers
 
 """
+import numpy as np
+
 import torch
 import torch.nn as nn
 import torchvision
 import torchvision.transforms as transforms
+
+
+# set random seeds for reproducibility
+torch.manual_seed(12)
+torch.cuda.manual_seed(12)
+np.random.seed(12)
 
 
 # Device configuration
@@ -13,10 +21,10 @@ device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 # Assume that we are on a CUDA machine, then this should print a CUDA device:
 print(f'Working on device={device}')
 
-# Hyper-parameters 
+# Hyper-parameters
 
 # each cifar image is RGB 32x32, so it is an 3D array [3,32,32]
-# we will flatten the image as vector dim=3*32*32 
+# we will flatten the image as vector dim=3*32*32
 input_size = 3*32*32
 
 hidden_size = 512
@@ -39,16 +47,15 @@ transform = transforms.Compose(
 trainset = torchvision.datasets.CIFAR10(root='./data', train=True,
                                         download=True, transform=transform)
 train_loader = torch.utils.data.DataLoader(trainset, batch_size=batch_size,
-                                          shuffle=True)
+                                           shuffle=True)
 
 testset = torchvision.datasets.CIFAR10(root='./data', train=False,
                                        download=True, transform=transform)
 test_loader = torch.utils.data.DataLoader(testset, batch_size=batch_size,
-                                         shuffle=False)
+                                          shuffle=False)
 
 
 #import matplotlib.pyplot as plt
-import numpy as np
 
 
 class MultilayerNeuralNet(nn.Module):
@@ -57,28 +64,27 @@ class MultilayerNeuralNet(nn.Module):
         Fully connected neural network with 3 hidden layers
         '''
         super(MultilayerNeuralNet, self).__init__()
-        
+
         # hidden layers sizes, you can play with it as you wish!
         hidden1 = 512
         hidden2 = 256
         hidden3 = 128
 
         # input to first hidden layer parameters
-        self.fc1 = nn.Linear(input_size, hidden1) 
+        self.fc1 = nn.Linear(input_size, hidden1)
         self.relu1 = nn.ReLU()
 
         # second hidden layer
-        self.fc2 = nn.Linear(hidden1, hidden2) 
+        self.fc2 = nn.Linear(hidden1, hidden2)
         self.relu2 = nn.ReLU()
-        
+
         # third hidden layer
         self.fc3 = nn.Linear(hidden2, hidden3)
         self.relu3 = nn.ReLU()
 
         # last output layer
-        self.output = nn.Linear(hidden3, num_classes) 
+        self.output = nn.Linear(hidden3, num_classes)
 
-    
     def forward(self, x):
         '''
         This method takes an input x and layer after layer compute network states.
@@ -94,14 +100,15 @@ class MultilayerNeuralNet(nn.Module):
         state = self.relu3(state)
 
         state = self.output(state)
-        
+
         return state
+
 
 model = MultilayerNeuralNet(input_size, num_classes).to(device)
 
 # Loss and optimizer
 criterion = nn.CrossEntropyLoss()
-optimizer = torch.optim.Adam(model.parameters(), lr=learning_rate)  
+optimizer = torch.optim.Adam(model.parameters(), lr=learning_rate)
 
 # set our model in the training mode
 model.train()
@@ -160,4 +167,5 @@ for epoch in range(num_epochs):
         acc = correct/total
 
         # Accuracy of the network on the 10000 test images
-        print(f'Epoch [{epoch+1}/{num_epochs}]], Loss: {epoch_loss:.4f} Test acc: {acc}')
+        print(
+            f'Epoch [{epoch+1}/{num_epochs}]], Loss: {epoch_loss:.4f} Test acc: {acc}')
