@@ -100,15 +100,28 @@ Epoch [5/5]], Loss: 1.2406 Test acc: 0.5166
 This model uses convolutional neural network with 3 convolution layers and output layer. As input we pass raw image pixels as 32x32 vector of numbers.   
 
 File: **[conv_net_cifar.py](https://github.com/ksopyla/pytorch_neural_networks/blob/master/conv_net_cifar.py)**
-This model achieve ~ 51% accuracy after 5 epoch.
+This model achieve ~ 66% accuracy after 5 epoch.
+
+Model summary:
+* conv 1 layer (3x3)
+* relu
+* conv 2 layer (3x3)
+* relu
+* max pooling
+* conv 3 layer (3x3)
+* relu
+* max pooling
+* linear
+* linear - output
+
 
 Sample output
 ```
-Epoch [1/5]], Loss: 1.5367 Test acc: 0.5282
-Epoch [2/5]], Loss: 1.2832 Test acc: 0.537
-Epoch [3/5]], Loss: 1.1848 Test acc: 0.5614
-Epoch [4/5]], Loss: 1.1269 Test acc: 0.5911
-Epoch [5/5]], Loss: 1.0814 Test acc: 0.6028
+Epoch [1/5]], Loss: 1.3781 Test acc: 0.5827
+Epoch [2/5]], Loss: 1.0444 Test acc: 0.6432
+Epoch [3/5]], Loss: 0.9129 Test acc: 0.6623
+Epoch [4/5]], Loss: 0.8251 Test acc: 0.6738
+Epoch [5/5]], Loss: 0.7628 Test acc: 0.6643
 ```
 ## Recurrent neural network 
 
