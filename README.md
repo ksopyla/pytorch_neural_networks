@@ -1,6 +1,6 @@
 # Pytorch neural networks tutorial
 
-This repository contains easy to follow Pytorch tutorial for beginners and intermidate studends. The goal is to  introduce you to pytorch on practical examples. I hope that it will help you to start your journey with neural networks.
+This repository contains easy to follow Pytorch tutorial for beginners and intermediate students. The goal is to  introduce you to pytorch on practical examples. I hope that it will help you to start your journey with neural networks.
 
 There are few popular neural network architecture which I teach on workshops or bootcamps like: feedforward, convolutional and recurrent.
 
