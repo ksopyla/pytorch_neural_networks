@@ -1,3 +1,8 @@
+import torch.optim as optim
+import torch.nn.functional as F
+import torch.nn as nn
+import numpy as np
+import matplotlib.pyplot as plt
 import torch
 import torchvision
 import torchvision.transforms as transforms
@@ -8,6 +13,9 @@ device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
 # Assume that we are on a CUDA machine, then this should print a CUDA device:
 print(device)
 
+num_classes = 10
+num_epochs = 5
+batch_size = 4
 
 
 transform = transforms.Compose(
@@ -16,20 +24,19 @@ transform = transforms.Compose(
 
 trainset = torchvision.datasets.CIFAR10(root='./data', train=True,
                                         download=True, transform=transform)
-trainloader = torch.utils.data.DataLoader(trainset, batch_size=4,
-                                          shuffle=True, num_workers=2)
+trainloader = torch.utils.data.DataLoader(trainset,
+                                          batch_size=batch_size,
+                                          shuffle=True)
 
 testset = torchvision.datasets.CIFAR10(root='./data', train=False,
                                        download=True, transform=transform)
-testloader = torch.utils.data.DataLoader(testset, batch_size=4,
-                                         shuffle=False, num_workers=2)
+testloader = torch.utils.data.DataLoader(testset,
+                                         batch_size=batch_size,
+                                         shuffle=False)
 
 classes = ('plane', 'car', 'bird', 'cat',
            'deer', 'dog', 'frog', 'horse', 'ship', 'truck')
 
-
-import matplotlib.pyplot as plt
-import numpy as np
 
 # functions to show an image
 
@@ -49,11 +56,7 @@ imshow(torchvision.utils.make_grid(images))
 plt.show()
 
 # print labels
-print(' '.join('%5s' % classes[labels[j]] for j in range(4)))           
-
-
-import torch.nn as nn
-import torch.nn.functional as F
+print(' '.join('%5s' % classes[labels[j]] for j in range(batch_size)))
 
 
 class Net(nn.Module):
@@ -79,7 +82,6 @@ class Net(nn.Module):
 net = Net()
 net.to(device)
 
-import torch.optim as optim
 
 criterion = nn.CrossEntropyLoss()
 optimizer = optim.SGD(net.parameters(), lr=0.001, momentum=0.9)
@@ -119,14 +121,14 @@ images, labels = dataiter.next()
 # print images
 imshow(torchvision.utils.make_grid(images))
 plt.show()
-print('GroundTruth: ', ' '.join('%5s' % classes[labels[j]] for j in range(4)))
+print('GroundTruth: ', ' '.join('%5s' % classes[labels[j]] for j in range(batch_size)))
 
 outputs = net(images)
 
 _, predicted = torch.max(outputs, 1)
 
 print('Predicted: ', ' '.join('%5s' % classes[predicted[j]]
-                              for j in range(4)))
+                              for j in range(batch_size)))
 
 correct = 0
 total = 0
