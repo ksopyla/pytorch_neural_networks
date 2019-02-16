@@ -87,7 +87,7 @@ criterion = nn.CrossEntropyLoss()
 optimizer = optim.SGD(net.parameters(), lr=0.001, momentum=0.9)
 
 
-for epoch in range(2):  # loop over the dataset multiple times
+for epoch in range(num_epochs):  # loop over the dataset multiple times
 
     running_loss = 0.0
     for i, data in enumerate(trainloader, 0):
@@ -113,22 +113,6 @@ for epoch in range(2):  # loop over the dataset multiple times
             running_loss = 0.0
 
 print('Finished Training')
-
-
-dataiter = iter(testloader)
-images, labels = dataiter.next()
-
-# print images
-imshow(torchvision.utils.make_grid(images))
-plt.show()
-print('GroundTruth: ', ' '.join('%5s' % classes[labels[j]] for j in range(batch_size)))
-
-outputs = net(images)
-
-_, predicted = torch.max(outputs, 1)
-
-print('Predicted: ', ' '.join('%5s' % classes[predicted[j]]
-                              for j in range(batch_size)))
 
 correct = 0
 total = 0

@@ -4,10 +4,14 @@ This repository contains easy to follow Pytorch tutorial for beginners and inter
 
 There are few popular neural network architecture which I teach on workshops or bootcamps like: feedforward, convolutional and recurrent.
 
-In this tutorial we build:
+In this tutorial we build CIFAR-10 classifiers:
 * Single layer fully connected neural network for CIFAR-10 classification. 
 * Feedforward neural network with three hidden layers for CIFAR-10 classification with ReLu activation
 * [Convolutional neural network](https://en.wikipedia.org/wiki/Convolutional_neural_network) for CIFAR-10 with 3 convolution layer with and fully connected output layer, as activation we use ReLu
+
+
+
+Recurent network 
 * (todo) LSTM recurrent neural network for counting chars in long text
 * (todo) LSTM recurrent neural network for IMDB sentiment analisys with torchtext
 
@@ -42,6 +46,10 @@ pipenv install
 ## Feedforward neural network for classifying CIFAR-10
 
 Network for classifying [CIFAR-10](https://www.cs.toronto.edu/~kriz/cifar.html) images into one of 10 categories: ['plane', 'car', 'bird', 'cat', 'deer', 'dog', 'frog', 'horse', 'ship', 'truck']
+
+It is worth checking current SotA results on CIFAR-10
+* [Who is the best in CIFAR-10?](http://rodrigob.github.io/are_we_there_yet/build/classification_datasets_results.html#43494641522d3130)
+
 
 ### Feedforward neural network with one hidden layer
 We build simple network with 1 hidden layer and output layer. As input we pass raw image pixels as 32x32 vector of numbers.   
