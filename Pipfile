@@ -10,6 +10,7 @@ autopep8 = "*"
 [packages]
 torch = "*"
 torchvision = "*"
+matplotlib = "*"
 
 [requires]
 python_version = "3.6"
