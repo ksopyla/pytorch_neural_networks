@@ -47,49 +47,81 @@ def imshow(img):
     plt.imshow(np.transpose(npimg, (1, 2, 0)))
 
 
-# get some random training images
-dataiter = iter(trainloader)
-images, labels = dataiter.next()
+# # get some random training images
+# dataiter = iter(trainloader)
+# images, labels = dataiter.next()
 
-# show images
-imshow(torchvision.utils.make_grid(images))
-plt.show()
+# # show images
+# imshow(torchvision.utils.make_grid(images))
+# plt.show()
 
-# print labels
-print(' '.join('%5s' % classes[labels[j]] for j in range(batch_size)))
+# # print labels
+# print(' '.join('%5s' % classes[labels[j]] for j in range(batch_size)))
 
 
-class Net(nn.Module):
+class ConvNet(nn.Module):
     def __init__(self):
-        super(Net, self).__init__()
-        self.conv1 = nn.Conv2d(3, 6, 5)
+        super(ConvNet, self).__init__()
+        
         self.pool = nn.MaxPool2d(2, 2)
-        self.conv2 = nn.Conv2d(6, 16, 5)
-        self.fc1 = nn.Linear(16 * 5 * 5, 120)
-        self.fc2 = nn.Linear(120, 84)
-        self.fc3 = nn.Linear(84, 10)
+
+        # channel_in=3 channels_out=8
+        #self.conv1 = nn.Conv2d(3, 8, 5)
+        self.conv1 = nn.Conv2d(in_channels=3, out_channels=8, kernel_size=3, stride=1, padding=1)
+        
+        self.conv2 = nn.Conv2d(8, 16, kernel_size=3, stride=1, padding=1)
+
+        self.conv3 = nn.Conv2d(16, 24, kernel_size=3, stride=1, padding=1)
+
+        # 24 chaneels by 8x8 pixesl
+        self.fc1 = nn.Linear(24 * 8 * 8, 100)
+        
+        self.output = nn.Linear(100, 10)
+
+
+        # self.conv1 = nn.Conv2d(3, 6, 5)
+        # self.pool = nn.MaxPool2d(2, 2)
+        # self.conv2 = nn.Conv2d(6, 16, 5)
+        # self.fc1 = nn.Linear(16 * 5 * 5, 120)
+        # self.fc2 = nn.Linear(120, 84)
+        # self.fc3 = nn.Linear(84, 10)
 
     def forward(self, x):
-        x = self.pool(F.relu(self.conv1(x)))
+        
+        x = F.relu(self.conv1(x))
+
+        # max_pooling will resize input from 32 to 16
         x = self.pool(F.relu(self.conv2(x)))
-        x = x.view(-1, 16 * 5 * 5)
+        # max_pooling will resize input from 16 to 8
+        x = self.pool(F.relu(self.conv3(x)))
+
+        x = x.view(-1, 24 * 8 * 8)
         x = F.relu(self.fc1(x))
-        x = F.relu(self.fc2(x))
-        x = self.fc3(x)
+        x = self.output(x)
         return x
 
+        # x = self.pool(F.relu(self.conv1(x)))
+        # x = self.pool(F.relu(self.conv2(x)))
+        # x = x.view(-1, 16 * 5 * 5)
+        # x = F.relu(self.fc1(x))
+        # x = F.relu(self.fc2(x))
+        # x = self.fc3(x)
+        # return x
 
-net = Net()
+
+net = ConvNet()
 net.to(device)
 
 
 criterion = nn.CrossEntropyLoss()
-optimizer = optim.SGD(net.parameters(), lr=0.001, momentum=0.9)
+#optimizer = optim.SGD(net.parameters(), lr=0.001, momentum=0.9)
+optimizer = optim.Adam(net.parameters(), lr=0.001)
 
-
+net.train()
 for epoch in range(num_epochs):  # loop over the dataset multiple times
 
     running_loss = 0.0
+    epoch_loss = 0
     for i, data in enumerate(trainloader, 0):
         # get the inputs
         inputs, labels = data
@@ -106,28 +138,33 @@ for epoch in range(num_epochs):  # loop over the dataset multiple times
         optimizer.step()
 
         # print statistics
-        running_loss += loss.item()
-        if i % 2000 == 1999:    # print every 2000 mini-batches
-            print('[%d, %5d] loss: %.3f' %
-                  (epoch + 1, i + 1, running_loss / 2000))
-            running_loss = 0.0
+        epoch_loss += loss.item()
+    
+    epoch_loss = epoch_loss / len(trainloader)
+
+    # Test the model
+
+    # set our model in the training mode
+    net.eval()
+    # In test phase, we don't need to compute gradients (for memory efficiency)
+    correct = 0
+    total = 0
+    with torch.no_grad():
+        for data in testloader:
+            images, labels = data
+            outputs = net(images)
+            _, predicted = torch.max(outputs.data, 1)
+            total += labels.size(0)
+            correct += (predicted == labels).sum().item()
+
+    # Accuracy of the network on the 10000 test images
+    acc = correct/total
+    print(f'Epoch [{epoch+1}/{num_epochs}]], Loss: {epoch_loss:.4f} Test acc: {acc}')
+
 
 print('Finished Training')
 
-correct = 0
-total = 0
-with torch.no_grad():
-    for data in testloader:
-        images, labels = data
-        outputs = net(images)
-        _, predicted = torch.max(outputs.data, 1)
-        total += labels.size(0)
-        correct += (predicted == labels).sum().item()
-
-print('Accuracy of the network on the 10000 test images: %d %%' % (
-    100 * correct / total))
-
-
+# Detailed accuracy per class
 class_correct = list(0. for i in range(10))
 class_total = list(0. for i in range(10))
 with torch.no_grad():

@@ -104,11 +104,11 @@ This model achieve ~ 51% accuracy after 5 epoch.
 
 Sample output
 ```
-Epoch [1/5]], Loss: 1.6971 Test acc: 0.4627
-Epoch [2/5]], Loss: 1.4874 Test acc: 0.4947
-Epoch [3/5]], Loss: 1.3887 Test acc: 0.493
-Epoch [4/5]], Loss: 1.3108 Test acc: 0.5144
-Epoch [5/5]], Loss: 1.2406 Test acc: 0.5166
+Epoch [1/5]], Loss: 1.5367 Test acc: 0.5282
+Epoch [2/5]], Loss: 1.2832 Test acc: 0.537
+Epoch [3/5]], Loss: 1.1848 Test acc: 0.5614
+Epoch [4/5]], Loss: 1.1269 Test acc: 0.5911
+Epoch [5/5]], Loss: 1.0814 Test acc: 0.6028
 ```
 ## Recurrent neural network 
 
@@ -122,3 +122,4 @@ TODO:
 * [CS231n Convolutional Neural Networks for Visual Recognition](http://cs231n.github.io/convolutional-networks/)
 * [Awesome Pytorch](https://github.com/bharathgs/Awesome-pytorch-list) - A curated list of dedicated pytorch resources. 
 * [Pytorch tutorial](https://github.com/yunjey/pytorch-tutorial) - this repository provides tutorial code for deep learning researchers to learn PyTorch
+* [Basics of Image Classification with PyTorch](https://heartbeat.fritz.ai/basics-of-image-classification-with-pytorch-2f8973c51864)
