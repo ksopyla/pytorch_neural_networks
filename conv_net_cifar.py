@@ -6,12 +6,16 @@ import matplotlib.pyplot as plt
 import torch
 import torchvision
 import torchvision.transforms as transforms
+from datetime import datetime
 
 # check if cuda is enabled
-device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
+USE_GPU=1
+# Device configuration
+device = torch.device('cuda' if (torch.cuda.is_available() and USE_GPU) else 'cpu')
+
 
 # Assume that we are on a CUDA machine, then this should print a CUDA device:
-print(device)
+print(f'Using {device} device')
 
 num_classes = 10
 num_epochs = 5
@@ -62,24 +66,25 @@ def imshow(img):
 class ConvNet(nn.Module):
     def __init__(self):
         super(ConvNet, self).__init__()
-        
+
         self.pool = nn.MaxPool2d(2, 2)
 
         # channel_in=3 channels_out=8
         #self.conv1 = nn.Conv2d(3, 8, 5)
-        self.conv1 = nn.Conv2d(in_channels=3, out_channels=8, kernel_size=3, stride=1, padding=1)
-        
+        self.conv1 = nn.Conv2d(in_channels=3, out_channels=8,
+                               kernel_size=3, stride=1, padding=1)
+
         self.conv2 = nn.Conv2d(8, 16, kernel_size=3, stride=1, padding=1)
 
         self.conv3 = nn.Conv2d(16, 24, kernel_size=3, stride=1, padding=1)
 
         # 24 chaneels by 8x8 pixesl
         self.fc1 = nn.Linear(24 * 8 * 8, 100)
-        
+
         self.output = nn.Linear(100, 10)
 
     def forward(self, x):
-        
+
         x = F.relu(self.conv1(x))
 
         # max_pooling will resize input from 32 to 16
@@ -92,6 +97,7 @@ class ConvNet(nn.Module):
         x = self.output(x)
         return x
 
+
 net = ConvNet()
 net.to(device)
 
@@ -99,9 +105,11 @@ criterion = nn.CrossEntropyLoss()
 #optimizer = optim.SGD(net.parameters(), lr=0.001, momentum=0.9)
 optimizer = optim.Adam(net.parameters(), lr=0.001)
 
-net.train()
+
 for epoch in range(num_epochs):  # loop over the dataset multiple times
 
+    start_time = datetime.now()
+    net.train()
     running_loss = 0.0
     epoch_loss = 0
     for i, data in enumerate(trainloader, 0):
@@ -121,8 +129,10 @@ for epoch in range(num_epochs):  # loop over the dataset multiple times
 
         # print statistics
         epoch_loss += loss.item()
-    
+
     epoch_loss = epoch_loss / len(trainloader)
+
+    time_elapsed = datetime.now() - start_time
 
     # Test the model
 
@@ -133,15 +143,17 @@ for epoch in range(num_epochs):  # loop over the dataset multiple times
     total = 0
     with torch.no_grad():
         for data in testloader:
-            images, labels = data
-            outputs = net(images)
+            inputs, labels = data
+            inputs, labels = inputs.to(device), labels.to(device)
+            outputs = net(inputs)
             _, predicted = torch.max(outputs.data, 1)
             total += labels.size(0)
             correct += (predicted == labels).sum().item()
 
     # Accuracy of the network on the 10000 test images
     acc = correct/total
-    print(f'Epoch [{epoch+1}/{num_epochs}]], Loss: {epoch_loss:.4f} Test acc: {acc}')
+    print(
+        f'Epoch [{epoch+1}/{num_epochs}], Loss: {epoch_loss:.4f} Test acc: {acc} time={time_elapsed}')
 
 
 print('Finished Training')
@@ -151,14 +163,15 @@ class_correct = list(0. for i in range(10))
 class_total = list(0. for i in range(10))
 with torch.no_grad():
     for data in testloader:
-        images, labels = data
-        outputs = net(images)
+        inputs, labels = data
+        inputs, labels = inputs.to(device), labels.to(device)
+        outputs = net(inputs)
         _, predicted = torch.max(outputs, 1)
         c = (predicted == labels).squeeze()
         for i in range(4):
-            label = labels[i]
-            class_correct[label] += c[i].item()
-            class_total[label] += 1
+                label = labels[i]
+                class_correct[label] += c[i].item()
+                class_total[label] += 1
 
 
 for i in range(10):
