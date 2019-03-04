@@ -58,7 +58,7 @@ File: **[feedforward_1_hid_nn.py](https://github.com/ksopyla/pytorch_neural_netw
 This model achieve ~ 48% accuracy after 5 epoch.
 
 Model summary:
-* input layer: 3*32*32 (3 rgb channels times image resolution 32pixels)
+* input layer: 3x32x32 (3 rgb channels times image resolution 32pixels)
 * hidden layer: 512 neurons
 * output layer: 10 neurons, each reflects probability of belonging to class 
 
@@ -81,7 +81,7 @@ File: **[feedforward_3_hid_nn.py](https://github.com/ksopyla/pytorch_neural_netw
 This model achieve ~ 51% accuracy after 5 epoch.
 
 Model summary:
-* input layer: 3*32*32 (3 rgb channels times image resolution 32pixels)
+* input layer: 3x32x32 (3 rgb channels times image resolution 32pixels)
 * 3 x hidden layers: 512, 256, 128 neurons
 * output layer: 10 neurons, each reflects probability of belonging to class 
 
@@ -103,16 +103,16 @@ File: **[conv_net_cifar.py](https://github.com/ksopyla/pytorch_neural_networks/b
 This model achieve ~ 67% accuracy after 5 epoch.
 
 Model summary:
-* conv 1 layer (3x3)
-* relu
-* conv 2 layer (3x3)
-* relu
-* max pooling
-* conv 3 layer (3x3)
-* relu
-* max pooling
-* linear
-* linear - output
+* conv 1 layer - kernel size 3x3, channels in 3, channels out 8,stride=1, padding=1
+* relu - activation
+* conv 2 layer - kernel size 3x3, channels in 8, channels out 16,stride=1, padding=1
+* relu - activation
+* max pooling - window size 2x2, it will downsize image 2x (from 32x32 to 16x16)
+* conv 3 layer - kernel size 3x3, channels in 16, channels out 24,stride=1, padding=1
+* relu - activation
+* max pooling- window size 2x2, it will downsize image 2x (from 16x16 to 8x8)
+* fully connected - 24x8x8x100
+* fully connected(output) - 100x10
 
 
 Sample output
