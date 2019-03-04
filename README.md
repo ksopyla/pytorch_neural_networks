@@ -100,7 +100,7 @@ Epoch [5/5]], Loss: 1.2406 Test acc: 0.5166
 This model uses convolutional neural network with 3 convolution layers and output layer. As input we pass raw image pixels as 32x32 vector of numbers.   
 
 File: **[conv_net_cifar.py](https://github.com/ksopyla/pytorch_neural_networks/blob/master/conv_net_cifar.py)**
-This model achieve ~ 66% accuracy after 5 epoch.
+This model achieve ~ 67% accuracy after 5 epoch.
 
 Model summary:
 * conv 1 layer (3x3)
@@ -117,11 +117,23 @@ Model summary:
 
 Sample output
 ```
-Epoch [1/5]], Loss: 1.3781 Test acc: 0.5827
-Epoch [2/5]], Loss: 1.0444 Test acc: 0.6432
-Epoch [3/5]], Loss: 0.9129 Test acc: 0.6623
-Epoch [4/5]], Loss: 0.8251 Test acc: 0.6738
-Epoch [5/5]], Loss: 0.7628 Test acc: 0.6643
+Epoch [1/5]], Loss: 1.3465 Test acc: 0.6038 time=0:00:42.301045
+Epoch [2/5]], Loss: 1.0122 Test acc: 0.64 time=0:00:42.168382
+Epoch [3/5]], Loss: 0.8989 Test acc: 0.6649 time=0:00:41.995531
+Epoch [4/5]], Loss: 0.8214 Test acc: 0.6834 time=0:00:42.099388
+Epoch [5/5]], Loss: 0.7627 Test acc: 0.6761 time=0:00:42.047874
+Finished Training
+Accuracy of plane : 76 %
+Accuracy of   car : 73 %
+Accuracy of  bird : 42 %
+Accuracy of   cat : 60 %
+Accuracy of  deer : 63 %
+Accuracy of   dog : 53 %
+Accuracy of  frog : 72 %
+Accuracy of horse : 69 %
+Accuracy of  ship : 79 %
+Accuracy of truck : 85 %
+
 ```
 ## Recurrent neural network 
 
