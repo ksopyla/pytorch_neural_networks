@@ -66,7 +66,6 @@ class ConvNet(nn.Module):
         self.pool = nn.MaxPool2d(2, 2)
 
         # channel_in=3 channels_out=8
-        #self.conv1 = nn.Conv2d(3, 8, 5)
         self.conv1 = nn.Conv2d(in_channels=3, out_channels=8, kernel_size=3, stride=1, padding=1)
         
         self.conv2 = nn.Conv2d(8, 16, kernel_size=3, stride=1, padding=1)
