@@ -47,6 +47,69 @@ def accuracy(preds, y):
     return acc
 
 
+
+
+# gen the trainning
+min_seq_len = 200
+max_seq_len = 300
+
+# numer of tokenes in vocab to generate, max 10
+# it is equal the number of classes
+seq_tokens = 10
+
+n_train = 1000
+n_valid = 200
+
+train_df = gen_df(n=n_train, min_seq_len=min_seq_len,
+                      max_seq_len=max_seq_len, seq_tokens=seq_tokens)
+valid_df = gen_df(n=n_valid, min_seq_len=min_seq_len,
+                      max_seq_len=max_seq_len, seq_tokens=seq_tokens)
+
+
+print(train_df)
+print(valid_df)
+
+TEXT = data.Field(sequential=True, lower=True, tokenize=tokenize,fix_length=None)
+LABEL = data.Field(sequential=False, use_vocab=False, is_target=True)
+
+fields = {"text": TEXT, "label": LABEL}
+
+
+train_ds = DataFrameDataset(train_df, fields)
+valid_ds = DataFrameDataset(valid_df, fields)
+
+# numericalize the words
+TEXT.build_vocab(train_ds, min_freq=1)
+print(TEXT.vocab.freqs.most_common(20))
+
+vocab = TEXT.vocab
+vocab_size = len(vocab)
+
+batch_size = 4
+train_iter = BucketIterator(
+    train_ds, 
+    batch_size=batch_size, 
+    sort_key=lambda x: len(x.text), 
+    sort_within_batch=True, 
+    device=device)
+
+valid_iter = BucketIterator(
+    valid_ds, 
+    batch_size=batch_size, 
+    sort_key=lambda x: len(x.text), 
+    sort_within_batch=True,
+    device=device)
+
+#hidden size
+n_hid=200
+# embed size
+n_embed=10
+# number of layers
+n_layers=1
+
+
+
+
 class SeqLSTM(nn.Module):
     """
     LSTM example for long sequence
@@ -92,57 +155,6 @@ class SeqLSTM(nn.Module):
         return out
 
 
-# gen the trainning
-min_seq_len = 200
-max_seq_len = 300
-
-# numer of tokenes in vocab to generate, max 10
-# it is equal the number of classes
-seq_tokens = 10
-
-n_train = 1000
-n_valid = 200
-
-train_df = gen_df(n=n_train, min_seq_len=min_seq_len,
-                      max_seq_len=max_seq_len, seq_tokens=seq_tokens)
-valid_df = gen_df(n=n_valid, min_seq_len=min_seq_len,
-                      max_seq_len=max_seq_len, seq_tokens=seq_tokens)
-
-
-print(train_df)
-print(valid_df)
-
-TEXT = data.Field(sequential=True, lower=True, tokenize=tokenize,fix_length=None)
-LABEL = data.Field(sequential=False, use_vocab=False, is_target=True)
-
-fields = {"text": TEXT, "label": LABEL}
-
-
-train_ds = DataFrameDataset(train_df, fields)
-valid_ds = DataFrameDataset(valid_df, fields)
-
-# numericalize the words
-TEXT.build_vocab(train_ds, min_freq=1)
-print(TEXT.vocab.freqs.most_common(20))
-
-vocab = TEXT.vocab
-vocab_size = len(vocab)
-
-#hidden size
-n_hid=200
-# embed size
-n_embed=80
-# number of layers
-n_layers=1
-
-print("-"*80)
-print(f'n_train={n_train}, n_valid={n_valid}')
-print(f'min_seq_len={min_seq_len}, max_seq_len={max_seq_len}')
-
-print(f'model params')
-print(f'vocab={vocab_size}, output={seq_tokens}')
-print(f'n_layers={n_layers}, n_hid={n_hid} embed={n_embed}')
-
 model = SeqLSTM(vocab_size=vocab_size, output_size=seq_tokens,
                     embed_size=n_embed, hidden_size=n_hid)
 model.to(device)
@@ -151,20 +163,14 @@ criterion = nn.CrossEntropyLoss()
 optimizer = optim.Adam(model.parameters())
 
 
-batch_size = 4
-train_iter = BucketIterator(
-    train_ds, 
-    batch_size=batch_size, 
-    sort_key=lambda x: len(x.text), 
-    sort_within_batch=True, 
-    device=device)
 
-valid_iter = BucketIterator(
-    valid_ds, 
-    batch_size=batch_size, 
-    sort_key=lambda x: len(x.text), 
-    sort_within_batch=True,
-    device=device)
+print("-"*80)
+print(f'n_train={n_train}, n_valid={n_valid}')
+print(f'min_seq_len={min_seq_len}, max_seq_len={max_seq_len}')
+
+print(f'model params')
+print(f'vocab={vocab_size}, output={seq_tokens}')
+print(f'n_layers={n_layers}, n_hid={n_hid} embed={n_embed}')
 
 epoch_loss = 0
 epoch_acc = 0
