@@ -49,8 +49,8 @@ def accuracy(preds, y):
 
 
 
-# gen the trainning
-min_seq_len = 200
+# gen the trainning data
+min_seq_len = 100
 max_seq_len = 300
 
 # numer of tokenes in vocab to generate, max 10
