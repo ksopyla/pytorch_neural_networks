@@ -28,12 +28,13 @@ This tutorial was written and tested on Ubuntu 18.10,
 
 
 1. Install Python.
-1. Install pipenv - https://pipenv.readthedocs.io/en/latest/install/#pragmatic-installation-of-pipenv
+1. [Install pipenv](https://pipenv.readthedocs.io/en/latest/install/#pragmatic-installation-of-pipenv)
 1. Git clone the repository
 1. Install all necessary python packages executing this command in terminal
 
 ```
-cd python_neural_network
+git clone https://github.com/ksopyla/pytorch_neural_networks.git
+cd pytorch_neural_networks
 pipenv install
 ```
 
