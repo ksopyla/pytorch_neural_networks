@@ -3,7 +3,7 @@ import random
 import collections
 import pandas as pd
 
-def gen_sequence(seq_len, vocab_max_size=10):
+def gen_sequence(seq_len, vocab_max_size=10, prob=None):
     """
     Generate sequence for chars from vocabulary of first 10 chars
 
@@ -22,7 +22,8 @@ def gen_sequence(seq_len, vocab_max_size=10):
     vocab_len = len(vocab)
 
     # uniform distribution, you can change it if you want different probability distribution
-    prob = ([1/vocab_len]*vocab_len)
+    if prob is None:
+        prob = ([1/vocab_len]*vocab_len)
 
     seq = random.choices(vocab, weights=prob, k=seq_len)
     counts = collections.Counter(seq)
@@ -62,7 +63,14 @@ def gen_df(n=2, min_seq_len=10, max_seq_len=10, seq_tokens=10):
     for i in range(n):
         # random seq_len
         seq_len = random.randint(min_seq_len, max_seq_len)
-        seq, label, label_txt = gen_sequence(seq_len, vocab_max_size=seq_tokens)
+
+
+        prob = ([1/seq_tokens]*seq_tokens)
+        # it-h token will have increased probalility
+        prob[i% seq_tokens]*=2
+
+        seq, label, label_txt = gen_sequence(seq_len, vocab_max_size=seq_tokens, prob=prob)
+
         data['text'].append(seq)
         data['label'].append(label)
         data['label_txt'].append(label_txt)

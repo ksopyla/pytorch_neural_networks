@@ -63,7 +63,7 @@ class SeqLSTM(nn.Module):
         self.embed = nn.Embedding(vocab_size, embed_size)
 
         #after the embedding we can add dropout
-        # self.drop = nn.Dropout(0.1)
+        self.drop = nn.Dropout(0.1)
 
         self.lstm = nn.LSTM(embed_size, hidden_size,
                             num_layers, batch_first=False)
@@ -74,13 +74,13 @@ class SeqLSTM(nn.Module):
         # Embed word ids to vectors
         len_seq, bs = seq.shape
         w_embed = self.embed(seq)
-        # w_embed = self.drop(w_embed)
+        w_embed = self.drop(w_embed)
 
         # https://github.com/bentrevett/pytorch-sentiment-analysis/blob/master/2%20-%20Upgraded%20Sentiment%20Analysis.ipynb
         output, (hidden, cell) = self.lstm(w_embed)
 
         # use dropout
-        # hidden = self.dropout(hidden[-1,:,:])
+        # hidden = self.drop(hidden[-1,:,:])
 
         # hidden has size [1,batch,hid dim]
         # this does .squeeze(0) now hidden has size [batch, hid dim]
@@ -93,7 +93,7 @@ class SeqLSTM(nn.Module):
 
 
 # gen the trainning
-min_seq_len = 200
+min_seq_len = 100
 max_seq_len = 300
 
 # numer of tokenes in vocab to generate, max 10
@@ -131,7 +131,7 @@ vocab_size = len(vocab)
 #hidden size
 n_hid=200
 # embed size
-n_embed=80
+n_embed=20
 # number of layers
 n_layers=1
 
@@ -151,7 +151,7 @@ criterion = nn.CrossEntropyLoss()
 optimizer = optim.Adam(model.parameters())
 
 
-batch_size = 4
+batch_size = 16
 train_iter = BucketIterator(
     train_ds, 
     batch_size=batch_size, 
@@ -168,7 +168,7 @@ valid_iter = BucketIterator(
 
 epoch_loss = 0
 epoch_acc = 0
-epoch = 20
+epoch = 60
 
 for e in range(epoch):
 
