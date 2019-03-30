@@ -2,18 +2,22 @@
 
 This repository contains easy to follow Pytorch tutorial for beginners and intermediate students. The goal is to  introduce you to pytorch on practical examples. I hope that it will help you to start your journey with neural networks.
 
-There are few popular neural network architecture which I teach on workshops or bootcamps like: feedforward, convolutional and recurrent.
+There are few popular neural network architecture which I teach on workshops or bootcamps like: feedforward, convolutional, recurrent, transformer. Examples will help you with image and text classification tasks.
 
-In this tutorial we build CIFAR-10 classifiers:
+Image classification:
 * Single layer fully connected neural network for CIFAR-10 classification. 
-* Feedforward neural network with three hidden layers for CIFAR-10 classification with ReLu activation
-* [Convolutional neural network](https://en.wikipedia.org/wiki/Convolutional_neural_network) for CIFAR-10 with 3 convolution layer with and fully connected output layer, as activation we use ReLu
+* Feedforward neural network with three hidden layers for CIFAR-10 classification with ReLu activation.
+* [Convolutional neural network](https://en.wikipedia.org/wiki/Convolutional_neural_network) for CIFAR-10 with 3 convolution layer with and fully connected output layer, as activation we use ReLu.
+
+
+NLP tasks:
+* LSTM recurrent neural network for counting chars in long text.
 
 
 
-Recurent network 
-* (todo) LSTM recurrent neural network for counting chars in long text
-* (todo) LSTM recurrent neural network for IMDB sentiment analisys with torchtext
+TODO: 
+* (todo) LSTM recurrent neural network for IMDB sentiment analysis with torchtext
+* (todo) Transformer for text classification on IMDB
 
 ## Prerequistis
 
@@ -136,9 +140,42 @@ Accuracy of  ship : 79 %
 Accuracy of truck : 85 %
 
 ```
-## Recurrent neural network 
 
-TODO:
+
+## LSTM recurrent neural network for counting chars in long text
+
+In this example we build LSTM network which will work on text. Our goal is counting chars in text and predicting the most frequent one. Based on the provided code you will be able to adopt do almost any text classification task.
+Code  shows you how to process input text with TorchText, build and train recurrent n-layer LSTM with word embeddings.
+
+File: **[lstm_net_counting_chars.py](https://github.com/ksopyla/pytorch_neural_networks/blob/master/lstm_net_counting_chars.py)**
+
+This model achieve ~ ??% accuracy after ?? epoch.
+
+Sample output
+```
+Epoch [1/5]], Loss: 1.3465 Test acc: 0.6038 time=0:00:42.301045
+Epoch [2/5]], Loss: 1.0122 Test acc: 0.64 time=0:00:42.168382
+Epoch [3/5]], Loss: 0.8989 Test acc: 0.6649 time=0:00:41.995531
+Epoch [4/5]], Loss: 0.8214 Test acc: 0.6834 time=0:00:42.099388
+Epoch [5/5]], Loss: 0.7627 Test acc: 0.6761 time=0:00:42.047874
+Finished Training
+Accuracy of plane : 76 %
+Accuracy of   car : 73 %
+Accuracy of  bird : 42 %
+Accuracy of   cat : 60 %
+Accuracy of  deer : 63 %
+Accuracy of   dog : 53 %
+Accuracy of  frog : 72 %
+Accuracy of horse : 69 %
+Accuracy of  ship : 79 %
+Accuracy of truck : 85 %
+
+```
+
+## LSTM recurrent neural network for counting chars in long text
+
+
+
 
 
 

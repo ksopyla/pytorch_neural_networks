@@ -10,7 +10,7 @@ def gen_sequence(seq_len, vocab_max_size=10, prob=None):
     Attributes:
     -----------
     seq_len: int
-        sequence lenght
+        sequence length
     vocab_max_size: int
         how many different chars our sequence will have, max=10, for simplicity 10 first alphabet letters is considered only.
     """
@@ -66,7 +66,7 @@ def gen_df(n=2, min_seq_len=10, max_seq_len=10, seq_tokens=10):
 
 
         prob = ([1/seq_tokens]*seq_tokens)
-        # it-h token will have increased probalility
+        # it-h token will have increased probability
         prob[i% seq_tokens]*=2
 
         seq, label, label_txt = gen_sequence(seq_len, vocab_max_size=seq_tokens, prob=prob)
