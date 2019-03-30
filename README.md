@@ -16,7 +16,7 @@ NLP tasks:
 
 
 TODO: 
-* (todo) LSTM recurrent neural network for IMDB sentiment analysis with torchtext
+* (todo) LSTM recurrent neural network for IMDB sentiment analysis with truncated backpropagation through time (LSTM TBTT)
 * (todo) Transformer for text classification on IMDB
 
 ## Prerequistis
