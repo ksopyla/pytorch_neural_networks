@@ -6,8 +6,8 @@ from torch import nn, optim
 from torchtext import data
 from torchtext.data import BucketIterator
 
-from data_helpers.data_gen_utils import gen_df 
-from data_helpers.dataframe_dataset import DataFrameDataset
+from data_gen_utils import gen_df 
+from dataframe_dataset import DataFrameDataset
 
 
 import numpy as np

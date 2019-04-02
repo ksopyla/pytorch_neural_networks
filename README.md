@@ -1,8 +1,8 @@
 # Pytorch neural networks tutorial
 
-This repository contains easy to follow Pytorch tutorial for beginners and intermediate students. The goal is to  introduce you to pytorch on practical examples. I hope that it will help you to start your journey with neural networks.
+This repository contains easy to follow Pytorch tutorial for beginners and intermediate students. The goal is to introduce you to Pytorch on practical examples. I hope that it will help you to start your journey with neural networks.
 
-There are few popular neural network architecture which I teach on workshops or bootcamps like: feedforward, convolutional, recurrent, transformer. Examples will help you with image and text classification tasks.
+There are a few popular neural network architecture which I teach on workshops or boot camps like feedforward, convolutional, recurrent, transformer. Examples will help you with image and text classification tasks.
 
 Image classification:
 * Single layer fully connected neural network for CIFAR-10 classification. 
@@ -11,15 +11,16 @@ Image classification:
 
 
 NLP tasks:
-* LSTM recurrent neural network for counting chars in long text.
+* LSTM recurrent neural network for counting chars in a long text.
 
 
 
 TODO: 
 * (todo) LSTM recurrent neural network for IMDB sentiment analysis with truncated backpropagation through time (LSTM TBTT)
+* (todo) LSTM recurrent neural network for multilabel classification (Toxicity dataset)
 * (todo) Transformer for text classification on IMDB
 
-## Prerequistis
+## Prerequisites
 
 This tutorial was written and tested on Ubuntu 18.10, 
 
@@ -45,7 +46,7 @@ pipenv install
 
 ## Repository structure
 
-* ./data - folder for downloaded dataset, all data we are working with are automatically downloaded at first use
+* ./data - folder for a downloaded dataset, all data we are working with are automatically downloaded at first use
 
 
 ## Feedforward neural network for classifying CIFAR-10
@@ -57,7 +58,7 @@ It is worth checking current SotA results on CIFAR-10
 
 
 ### Feedforward neural network with one hidden layer
-We build simple network with 1 hidden layer and output layer. As input we pass raw image pixels as 32x32 vector of numbers.   
+We build a simple network with 1 hidden layer and an output layer. As input, we pass raw image pixels as the 32x32 vector of numbers.   
 
 File: **[feedforward_1_hid_nn.py](https://github.com/ksopyla/pytorch_neural_networks/blob/master/feedforward_1_hid_nn.py)**
 This model achieve ~ 48% accuracy after 5 epoch.
@@ -79,7 +80,7 @@ Epoch [5/5]], Loss: 1.4130 Test acc: 0.4799
 ### Feedforward neural network with three hidden layers
 Analogous to previous model feedforward network with 3 hidden layers and output layer. 
 
-This is upgraded version of the previous model, between input and output we added 3 fully connected hidden layers. Adding more layers makes the network more expressive but harder to train. The three new problems could emerge vanishing gradients, model overfitting, and computation time complexity. In our case where the dataset is rather small, we did not see those problems in real scale.
+This is an upgraded version of the previous model, between input and output we added 3 fully connected hidden layers. Adding more layers makes the network more expressive but harder to train. The three new problems could emerge vanishing gradients, model overfitting, and computation time complexity. In our case where the dataset is rather small, we did not see those problems in real scale.
 
 
 File: **[feedforward_3_hid_nn.py](https://github.com/ksopyla/pytorch_neural_networks/blob/master/feedforward_3_hid_nn.py)**
@@ -102,7 +103,7 @@ Epoch [5/5]], Loss: 1.2406 Test acc: 0.5166
 
 ## Convolutional neural network for classifying CIFAR-10
 
-This model uses convolutional neural network with 3 convolution layers and output layer. As input we pass raw image pixels as 32x32 vector of numbers.   
+This model uses a convolutional neural network with 3 convolution layers and an output layer. As input, we pass raw image pixels as the 32x32 vector of numbers.   
 
 File: **[conv_net_cifar.py](https://github.com/ksopyla/pytorch_neural_networks/blob/master/conv_net_cifar.py)**
 This model achieve ~ 67% accuracy after 5 epoch.
@@ -144,36 +145,26 @@ Accuracy of truck : 85 %
 
 ## LSTM recurrent neural network for counting chars in long text
 
-In this example we build LSTM network which will work on text. Our goal is counting chars in text and predicting the most frequent one. Based on the provided code you will be able to adopt do almost any text classification task.
-Code  shows you how to process input text with TorchText, build and train recurrent n-layer LSTM with word embeddings.
+In this example, we build the LSTM network which will work on text. Our goal is counting chars in text and predicting the most frequent one. Based on the provided code you will be able to adapt to almost any text classification task.
+The code shows you how to process input text with TorchText, build and train recurrent n-layer LSTM with word embeddings.
 
-File: **[lstm_net_counting_chars.py](https://github.com/ksopyla/pytorch_neural_networks/blob/master/lstm_net_counting_chars.py)**
+File: **[lstm_net_counting_chars.py](https://github.com/ksopyla/pytorch_neural_networks/blob/master/RNN/lstm_net_counting_chars.py)**
 
-This model achieve ~ ??% accuracy after ?? epoch.
+This model achieves ~ 0.88 accuracy after 60 epoch.
 
 Sample output
 ```
-Epoch [1/5]], Loss: 1.3465 Test acc: 0.6038 time=0:00:42.301045
-Epoch [2/5]], Loss: 1.0122 Test acc: 0.64 time=0:00:42.168382
-Epoch [3/5]], Loss: 0.8989 Test acc: 0.6649 time=0:00:41.995531
-Epoch [4/5]], Loss: 0.8214 Test acc: 0.6834 time=0:00:42.099388
-Epoch [5/5]], Loss: 0.7627 Test acc: 0.6761 time=0:00:42.047874
-Finished Training
-Accuracy of plane : 76 %
-Accuracy of   car : 73 %
-Accuracy of  bird : 42 %
-Accuracy of   cat : 60 %
-Accuracy of  deer : 63 %
-Accuracy of   dog : 53 %
-Accuracy of  frog : 72 %
-Accuracy of horse : 69 %
-Accuracy of  ship : 79 %
-Accuracy of truck : 85 %
+Epoch 0/60 loss=2.293760901405698 acc=0.19711539149284363 time=0:00:01.084109
+Epoch 1/60 loss=2.1805509555907476 acc=0.125 time=0:00:01.066103
+Epoch 2/60 loss=2.13575065514398 acc=0.11057692766189575 time=0:00:01.034095
+...
+
+Epoch 56/60 loss=0.017137109050675045 acc=0.9134615659713745 time=0:00:01.045637
+Epoch 57/60 loss=0.03904954261249966 acc=0.8605769276618958 time=0:00:01.058192
+Epoch 58/60 loss=0.031670229065985905 acc=0.8990384936332703 time=0:00:01.096598
+Epoch 59/60 loss=0.022030536144498795 acc=0.889423131942749 time=0:00:01.144795
 
 ```
-
-## LSTM recurrent neural network for counting chars in long text
-
 
 
 
