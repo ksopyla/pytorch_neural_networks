@@ -60,7 +60,7 @@ It is worth checking current SotA results on CIFAR-10
 ### Feedforward neural network with one hidden layer
 We build a simple network with 1 hidden layer and an output layer. As input, we pass raw image pixels as the 32x32 vector of numbers.   
 
-File: **[feedforward_1_hid_nn.py](https://github.com/ksopyla/pytorch_neural_networks/blob/master/feedforward_1_hid_nn.py)**
+File: **[feedforward_1_hid_nn.py](feedforward_1_hid_nn.py)**
 This model achieve ~ 48% accuracy after 5 epoch.
 
 Model summary:
@@ -83,7 +83,7 @@ Analogous to previous model feedforward network with 3 hidden layers and output 
 This is an upgraded version of the previous model, between input and output we added 3 fully connected hidden layers. Adding more layers makes the network more expressive but harder to train. The three new problems could emerge vanishing gradients, model overfitting, and computation time complexity. In our case where the dataset is rather small, we did not see those problems in real scale.
 
 
-File: **[feedforward_3_hid_nn.py](https://github.com/ksopyla/pytorch_neural_networks/blob/master/feedforward_3_hid_nn.py)**
+File: **[feedforward_3_hid_nn.py](feedforward_3_hid_nn.py)**
 This model achieve ~ 51% accuracy after 5 epoch.
 
 Model summary:
@@ -105,7 +105,7 @@ Epoch [5/5]], Loss: 1.2406 Test acc: 0.5166
 
 This model uses a convolutional neural network with 3 convolution layers and an output layer. As input, we pass raw image pixels as the 32x32 vector of numbers.   
 
-File: **[conv_net_cifar.py](https://github.com/ksopyla/pytorch_neural_networks/blob/master/conv_net_cifar.py)**
+File: **[conv_net_cifar.py](conv_net_cifar.py)**
 This model achieve ~ 67% accuracy after 5 epoch.
 
 Model summary:
@@ -148,7 +148,7 @@ Accuracy of truck : 85 %
 In this example, we build the LSTM network which will work on text. Our goal is counting chars in text and predicting the most frequent one. Based on the provided code you will be able to adapt to almost any text classification task.
 The code shows you how to process input text with TorchText, build and train recurrent n-layer LSTM with word embeddings.
 
-File: **[lstm_net_counting_chars.py](https://github.com/ksopyla/pytorch_neural_networks/blob/master/RNN/lstm_net_counting_chars.py)**
+File: **[lstm_net_counting_chars.py](RNN/lstm_net_counting_chars.py)**
 
 This model achieves ~ 0.88 accuracy after 60 epoch.
 
@@ -163,6 +163,31 @@ Epoch 56/60 loss=0.017137109050675045 acc=0.9134615659713745 time=0:00:01.045637
 Epoch 57/60 loss=0.03904954261249966 acc=0.8605769276618958 time=0:00:01.058192
 Epoch 58/60 loss=0.031670229065985905 acc=0.8990384936332703 time=0:00:01.096598
 Epoch 59/60 loss=0.022030536144498795 acc=0.889423131942749 time=0:00:01.144795
+
+```
+
+
+## LSTM recurrent neural network for IMDB movie review sentiment analysis
+
+We build the LSTM network which will work on IMDB movie review text. This time we want to classify long text and show how to train recurrent network with use [Truncated Backpropagation through Time](https://machinelearningmastery.com/gentle-introduction-backpropagation-time/). This technique helps deal with vanishing and exploding gradients with very long sequences (long text, long amino sequence, time series). We will split gradient chain and do backpropagation only N-step backward.
+
+This example was coded based on suggestion in this Pytorch forum threads:
+
+* [Implementing Truncated Backpropagation Through Time
+](https://discuss.pytorch.org/t/implementing-truncated-backpropagation-through-time/15500)
+* [Correct way to do backpropagation through time?](https://discuss.pytorch.org/t/correct-way-to-do-backpropagation-through-time/11701)
+
+
+
+The code shows you how to process input text with TorchText, build and train recurrent n-layer LSTM with pre-trained word embeddings.
+
+File: **[lstm_net_counting_chars.py](RNN/lstm_imdb_tbptt.py)**
+
+This model achieves ~ ?? accuracy after ?? epoch.
+
+Sample output
+```
+todo
 
 ```
 
