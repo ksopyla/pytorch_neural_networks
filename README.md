@@ -171,7 +171,7 @@ Epoch 59/60 loss=0.022030536144498795 acc=0.889423131942749 time=0:00:01.144795
 
 We build the LSTM network which will work on IMDB movie review text. This time we want to classify long text and show how to train recurrent network with use [Truncated Backpropagation through Time](https://machinelearningmastery.com/gentle-introduction-backpropagation-time/). This technique helps deal with vanishing and exploding gradients with very long sequences (long text, long amino sequence, time series). We will split gradient chain and do backpropagation every K-steps backward.
 
-This example was coded based on suggestion in this Pytorch forum threads:
+This example was coded based on suggestions from Pytorch forum threads:
 
 * [Implementing Truncated Backpropagation Through Time
 ](https://discuss.pytorch.org/t/implementing-truncated-backpropagation-through-time/15500)
