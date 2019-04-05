@@ -169,7 +169,7 @@ Epoch 59/60 loss=0.022030536144498795 acc=0.889423131942749 time=0:00:01.144795
 
 ## LSTM recurrent neural network for IMDB movie review sentiment analysis
 
-We build the LSTM network which will work on IMDB movie review text. This time we want to classify long text and show how to train recurrent network with use [Truncated Backpropagation through Time](https://machinelearningmastery.com/gentle-introduction-backpropagation-time/). This technique helps deal with vanishing and exploding gradients with very long sequences (long text, long amino sequence, time series). We will split gradient chain and do backpropagation only N-step backward.
+We build the LSTM network which will work on IMDB movie review text. This time we want to classify long text and show how to train recurrent network with use [Truncated Backpropagation through Time](https://machinelearningmastery.com/gentle-introduction-backpropagation-time/). This technique helps deal with vanishing and exploding gradients with very long sequences (long text, long amino sequence, time series). We will split gradient chain and do backpropagation every K-steps backward.
 
 This example was coded based on suggestion in this Pytorch forum threads:
 
@@ -181,17 +181,43 @@ This example was coded based on suggestion in this Pytorch forum threads:
 
 The code shows you how to process input text with TorchText, build and train recurrent n-layer LSTM with pre-trained word embeddings.
 
-File: **[lstm_net_counting_chars.py](RNN/lstm_imdb_tbptt.py)**
+File: **[lstm_imdb_tbptt.py](RNN/lstm_imdb_tbptt.py)**
 
-This model achieves ~ ?? accuracy after ?? epoch.
+This model achieves ~ 0.85 accuracy after 10 epoch.
 
 Sample output
 ```
-todo
-
+Training Epoch 0/10 |################################| 782/782
+Validation Epoch 0/10 |################################| 782/782
+Epoch 0/10 loss=3.116480209295402 acc=0.8292838931083679 time=0:01:19.544885
+Training Epoch 1/10 |################################| 782/782
+Validation Epoch 1/10 |################################| 782/782
+Epoch 1/10 loss=1.9649102331837043 acc=0.8706841468811035 time=0:01:18.703602
+Training Epoch 2/10 |################################| 782/782
+Validation Epoch 2/10 |################################| 782/782
+Epoch 2/10 loss=1.2844358206490802 acc=0.8699648380279541 time=0:01:18.822965
+Training Epoch 3/10 |################################| 782/782
+Validation Epoch 3/10 |################################| 782/782
+Epoch 3/10 loss=0.7612629080134089 acc=0.8631713390350342 time=0:01:18.438742
+Training Epoch 4/10 |################################| 782/782
+Validation Epoch 4/10 |################################| 782/782
+Epoch 4/10 loss=0.46042709653039493 acc=0.8654091954231262 time=0:01:18.089986
+Training Epoch 5/10 |################################| 782/782
+Validation Epoch 5/10 |################################| 782/782
+Epoch 5/10 loss=0.3314593220629808 acc=0.8596547245979309 time=0:01:18.294183
+Training Epoch 6/10 |################################| 782/782
+Validation Epoch 6/10 |################################| 782/782
+Epoch 6/10 loss=0.2812261906621592 acc=0.8589354157447815 time=0:01:18.187062
+Training Epoch 7/10 |################################| 782/782
+Validation Epoch 7/10 |################################| 782/782
+Epoch 7/10 loss=0.2437611708150762 acc=0.8552589416503906 time=0:01:17.948963
+Training Epoch 8/10 |################################| 782/782
+Validation Epoch 8/10 |################################| 782/782
+Epoch 8/10 loss=0.2500312502574547 acc=0.8591752052307129 time=0:01:18.136995
+Training Epoch 9/10 |################################| 782/782
+Validation Epoch 9/10 |################################| 782/782
+Epoch 9/10 loss=0.2074765177977169 acc=0.8543797731399536 time=0:01:18.278987
 ```
-
-
 
 
 
