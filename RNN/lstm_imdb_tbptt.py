@@ -127,13 +127,11 @@ LABEL = data.LabelField()
 train_ds, valid_ds = datasets.IMDB.splits(TEXT, LABEL)
 
 
-
-train_ds, _ = train_ds.split(0.5)
-valid_ds, _ = valid_ds.split(0.5)
+# take a portion of datasets, for testing :)
+# train_ds, _ = train_ds.split(0.5)
+# valid_ds, _ = valid_ds.split(0.5)
 
 print(f'train={len(train_ds)} valid={len(valid_ds)}')
-
-
 
 # build the vocabulary
 TEXT.build_vocab(train_ds,min_freq=10, max_size=10000 ) #, vectors=GloVe(name='6B', dim=300))
@@ -159,7 +157,7 @@ n_hid=512
 n_embed=300
 # number of layers
 n_layers=1
-batch_size = 16
+batch_size = 256
 
 #split batch text in to bptt chunks
 bptt = 50
