@@ -12,11 +12,11 @@ Image classification:
 
 NLP tasks:
 * LSTM recurrent neural network for counting chars in a long text.
+* LSTM recurrent neural network for IMDB sentiment analysis with truncated backpropagation through time (LSTM TBTT)
 
 
 
 TODO: 
-* (todo) LSTM recurrent neural network for IMDB sentiment analysis with truncated backpropagation through time (LSTM TBTT)
 * (todo) LSTM recurrent neural network for multilabel classification (Toxicity dataset)
 * (todo) Transformer for text classification on IMDB
 
@@ -42,7 +42,6 @@ git clone https://github.com/ksopyla/pytorch_neural_networks.git
 cd pytorch_neural_networks
 pipenv install
 ```
-
 
 ## Repository structure
 

@@ -33,14 +33,11 @@ def accuracy(preds, y):
     """
     Returns accuracy per batch, i.e. if you get 8/10 right, this returns 0.8, NOT 8
     """
-
     # apply softmax
     preds = torch.nn.functional.softmax(preds, dim=1)
-
     # get max values along rows
     _, indices = preds.max(dim=1)
     # values, indices = torch.max(tensor, 0)
-
     correct = (indices == y).float()  # convert into float for division
     acc = correct.sum()/len(correct)
     return acc
@@ -120,20 +117,18 @@ class LongSeqTbttRnn(nn.Module):
 
 
 # set up fields
-TEXT = data.Field(lower=True, include_lengths=True)
+TEXT = data.Field(lower=True, include_lengths=True, tokenize=tokenize)
 LABEL = data.LabelField()
 
 # make splits for data
 train_ds, valid_ds = datasets.IMDB.splits(TEXT, LABEL)
 
 
-
-train_ds, _ = train_ds.split(0.5)
-valid_ds, _ = valid_ds.split(0.5)
+# take a portion of datasets, for testing :)
+# train_ds, _ = train_ds.split(0.5)
+# valid_ds, _ = valid_ds.split(0.5)
 
 print(f'train={len(train_ds)} valid={len(valid_ds)}')
-
-
 
 # build the vocabulary
 TEXT.build_vocab(train_ds,min_freq=10, max_size=10000 ) #, vectors=GloVe(name='6B', dim=300))
@@ -159,7 +154,7 @@ n_hid=512
 n_embed=300
 # number of layers
 n_layers=1
-batch_size = 16
+batch_size = 256
 
 #split batch text in to bptt chunks
 bptt = 50
