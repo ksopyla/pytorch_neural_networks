@@ -33,14 +33,11 @@ def accuracy(preds, y):
     """
     Returns accuracy per batch, i.e. if you get 8/10 right, this returns 0.8, NOT 8
     """
-
     # apply softmax
     preds = torch.nn.functional.softmax(preds, dim=1)
-
     # get max values along rows
     _, indices = preds.max(dim=1)
     # values, indices = torch.max(tensor, 0)
-
     correct = (indices == y).float()  # convert into float for division
     acc = correct.sum()/len(correct)
     return acc
@@ -120,7 +117,7 @@ class LongSeqTbttRnn(nn.Module):
 
 
 # set up fields
-TEXT = data.Field(lower=True, include_lengths=True)
+TEXT = data.Field(lower=True, include_lengths=True, tokenize=tokenize)
 LABEL = data.LabelField()
 
 # make splits for data
