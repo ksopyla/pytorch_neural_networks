@@ -1,14 +1,12 @@
 import torch
 from torch import nn, optim
-from torchtext import data
-from torchtext import datasets
+from torchtext import data, datasets
 import numpy as np
 import random
 
 from datetime import datetime
 
 from progress.bar import Bar
-
 
 # set random seeds for reproducibility
 torch.manual_seed(12)
@@ -70,15 +68,13 @@ print(LABEL.vocab.stoi)
 #hidden size
 n_hid=256
 # embed size
-n_embed=200
+n_embed=100
 # number of layers
 n_layers=1
 batch_size = 64
 
 input_dim = vocab_size # =10002
 output_dim = len(LABEL.vocab) # =2
-
-
 
 train_iter = data.BucketIterator(
     train_ds, batch_size=batch_size, sort_key=lambda x: len(x.text), sort_within_batch=True, device=device)
@@ -92,7 +88,6 @@ print(f'model params')
 print(f'input_dim={input_dim}, output={output_dim}')
 print(f'n_layers={n_layers}, n_hid={n_hid} embed={n_embed}')
 print(f'batch={batch_size}')
-
 
 class SeqRNN(nn.Module):
 
@@ -120,7 +115,6 @@ class SeqRNN(nn.Module):
         #output linear layer
         self.linear = nn.Linear(hidden_size, output_dim)
 
-
     def forward(self, seq):
         # Embed word ids to vectors
         len_seq, bs = seq.shape
@@ -141,12 +135,10 @@ model = SeqRNN(input_dim=input_dim, output_dim=output_dim,
                     embed_size=n_embed, hidden_size=n_hid)
 model.to(device)
 
-
 criterion = nn.CrossEntropyLoss()
 optimizer = optim.Adam(model.parameters())
 
 epoch_loss = 0
-
 epoch_acc = 0
 epoch = 10
 
@@ -155,20 +147,16 @@ for e in range(epoch):
     start_time = datetime.now()
     # train loop
     model.train()
-
     # progress
     bar = Bar(f'Training Epoch {e}/{epoch}', max=len(train_iter))
-
     for batch_idx, batch in enumerate(train_iter):
 
         model.zero_grad()
-        
         # move data to device (GPU if enabled, else CPU do nothing)
         batch_text = batch.text[0].to(device) # include lengths at [1]
         batch_label = batch.label.to(device)
         
         predictions = model(batch_text)
-
         # compute loss
         loss = criterion(predictions, batch_label)
         epoch_loss += loss.item()
@@ -194,10 +182,8 @@ for e in range(epoch):
             # print(f'batch_idx={batch_idx}')
             batch_text = batch.text[0] #batch.text is a tuple
             batch_label = batch.label
-            
             # get model output
             predictions = model(batch_text)
-
             # compute batch validation accuracy
             acc = accuracy(predictions, batch_label)
 
@@ -205,10 +191,9 @@ for e in range(epoch):
             bar.next()
 
     epoch_acc = epoch_acc/len(valid_iter)
-
     bar.finish()
-    # show summary
 
+    # show summary
     print(
         f'Epoch {e}/{epoch} loss={epoch_loss} acc={epoch_acc} time={time_elapsed}')
     epoch_loss = 0
