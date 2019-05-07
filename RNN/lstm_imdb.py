@@ -14,7 +14,7 @@ torch.cuda.manual_seed(12)
 np.random.seed(12)
 random.seed(12)
 
-USE_GPU=0
+USE_GPU=1
 # check if cuda device is enabled
 device = torch.device('cuda' if (torch.cuda.is_available() and USE_GPU) else 'cpu')
 
