@@ -5,7 +5,6 @@ import numpy as np
 import random
 
 from datetime import datetime
-
 from progress.bar import Bar
 
 # set random seeds for reproducibility
@@ -14,7 +13,7 @@ torch.cuda.manual_seed(12)
 np.random.seed(12)
 random.seed(12)
 
-USE_GPU=1
+USE_GPU=0
 # check if cuda device is enabled
 device = torch.device('cuda' if (torch.cuda.is_available() and USE_GPU) else 'cpu')
 
@@ -40,7 +39,9 @@ def accuracy(preds, y):
 ##### Read the data
 
 # set up fields
-TEXT = data.Field(lower=True, include_lengths=True, tokenize=tokenize)
+TEXT = data.Field(lower=True,
+                  include_lengths=True,
+                  tokenize=tokenize)
 LABEL = data.LabelField()
 
 # make splits for data
@@ -51,19 +52,20 @@ train_ds, valid_ds = datasets.IMDB.splits(TEXT, LABEL)
 print(f'train={len(train_ds)} valid={len(valid_ds)}')
 
 # build the vocabulary
-TEXT.build_vocab(train_ds,min_freq=10, max_size=10000 ) #, vectors=GloVe(name='6B', dim=300))
+TEXT.build_vocab(train_ds,
+                 min_freq=10,
+                 max_size=10000 ) #, vectors=GloVe(name='6B', dim=300))
 LABEL.build_vocab(train_ds)
 
-print(TEXT.vocab.freqs.most_common(20))
+print(TEXT.vocab.freqs.most_common(10))
+print(TEXT.vocab.freqs.most_common()[:-11:-1])
 vocab = TEXT.vocab
 
 vocab_size = len(vocab)
 print(f'vocab_size={vocab_size}')
-print(list(vocab.stoi.keys())[0:20])
-print(vocab.itos[0:20])
-print(vocab.vectors)
+print(list(vocab.stoi.keys())[0:10])
 
-print(LABEL.vocab.stoi)
+print(LABEL.vocab.stoi.keys())
 
 #hidden size
 n_hid=256
@@ -71,16 +73,21 @@ n_hid=256
 n_embed=100
 # number of layers
 n_layers=1
-batch_size = 64
+batch_size = 8
 
 input_dim = vocab_size # =10002
 output_dim = len(LABEL.vocab) # =2
 
 train_iter = data.BucketIterator(
-    train_ds, batch_size=batch_size, sort_key=lambda x: len(x.text), sort_within_batch=True, device=device)
+    train_ds,
+    batch_size=batch_size,
+    sort_key=lambda x: len(x.text),
+    sort_within_batch=True, device=device)
 
 valid_iter = data.BucketIterator(
-    valid_ds, batch_size=batch_size, sort_key=lambda x: len(x.text), sort_within_batch=True, device=device)
+    valid_ds, batch_size=batch_size,
+    sort_key=lambda x: len(x.text),
+    sort_within_batch=True, device=device)
 
 
 print("-"*80)
@@ -131,8 +138,9 @@ class SeqRNN(nn.Module):
         out = self.linear(last_output)
         return out
 
-model = SeqRNN(input_dim=input_dim, output_dim=output_dim,
-                    embed_size=n_embed, hidden_size=n_hid)
+model = SeqRNN(input_dim=input_dim,
+               output_dim=output_dim,
+               embed_size=n_embed, hidden_size=n_hid)
 model.to(device)
 
 criterion = nn.CrossEntropyLoss()
