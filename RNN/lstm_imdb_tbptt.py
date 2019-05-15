@@ -43,16 +43,17 @@ def accuracy(preds, y):
     return acc
 
 
-def split_batch(batch, bptt):
+def split_batch(seq_batch, bptt):
     """
     Split torch.tensor batch by bptt steps, 
     Split seqence dim by bptt
     """
-    batch_splits = batch.split(bptt,dim=0)
+    batch_splits = seq_batch.split(bptt,dim=0)
     return batch_splits
 
 
-
+###################################
+# Network topology definition
 
 class LongSeqTbttRnn(nn.Module):
     """
@@ -67,7 +68,6 @@ class LongSeqTbttRnn(nn.Module):
         self.hidden_size = hidden_size
         self.output_dim = output_dim
         self.num_layers = num_layers
-        self.batch_size = batch_size
 
         self.embed = nn.Embedding(input_dim, embed_size)
         # if we want to copy embedding vectors
@@ -116,6 +116,10 @@ class LongSeqTbttRnn(nn.Module):
 
 
 
+
+
+###################################
+
 # set up fields
 TEXT = data.Field(lower=True, include_lengths=True, tokenize=tokenize)
 LABEL = data.LabelField()
@@ -134,27 +138,36 @@ print(f'train={len(train_ds)} valid={len(valid_ds)}')
 TEXT.build_vocab(train_ds,min_freq=10, max_size=10000 ) #, vectors=GloVe(name='6B', dim=300))
 LABEL.build_vocab(train_ds)
 
-print(TEXT.vocab.freqs.most_common(20))
-
+# most common words
+print(TEXT.vocab.freqs.most_common(10))
+# least common words
+print(TEXT.vocab.freqs.most_common()[:-11:-1])
 vocab = TEXT.vocab
 
 vocab_size = len(vocab)
 print(f'vocab_size={vocab_size}')
-print(list(vocab.stoi.keys())[0:20])
-print(vocab.itos[0:20])
-print(vocab.vectors)
+# we have two additional words <unk>, <pad>
+print(list(vocab.stoi.keys())[0:10])
 
-print(LABEL.vocab.stoi)
+print(LABEL.vocab.stoi.keys())
+
+
+batch_size = 32
+
+train_iter = data.BucketIterator(
+    train_ds, batch_size=batch_size, sort_key=lambda x: len(x.text), sort_within_batch=True, device=device)
+
+valid_iter = data.BucketIterator(
+    valid_ds, batch_size=batch_size, sort_key=lambda x: len(x.text), sort_within_batch=True, device=device)
 
 
 
 #hidden size
-n_hid=512
+n_hid=256
 # embed size
-n_embed=300
+n_embed=100
 # number of layers
 n_layers=1
-batch_size = 256
 
 #split batch text in to bptt chunks
 bptt = 50
@@ -167,13 +180,6 @@ print(f'model params')
 print(f'input_dim={input_dim}, output={output_dim}')
 print(f'n_layers={n_layers}, n_hid={n_hid} embed={n_embed}')
 print(f'batch={batch_size}, bptt={bptt}')
-
-train_iter = data.BucketIterator(
-    train_ds, batch_size=batch_size, sort_key=lambda x: len(x.text), sort_within_batch=True, device=device)
-
-valid_iter = data.BucketIterator(
-    valid_ds, batch_size=batch_size, sort_key=lambda x: len(x.text), sort_within_batch=True, device=device)
-
 
 
 

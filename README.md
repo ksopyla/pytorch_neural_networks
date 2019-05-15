@@ -227,6 +227,18 @@ The code shows you how to process input text with TorchText, build and train rec
 
 File: **[lstm_imdb_tbptt.py](RNN/lstm_imdb_tbptt.py)**
 
+Model params:
+
+```
+bptt=50
+batch_size = 64
+#hidden size
+n_hid=256
+# embed size
+n_embed=100
+# number of layers
+n_layers=1
+```
 This model achieves ~ 0.85 accuracy after 10 epoch.
 
 Sample output
