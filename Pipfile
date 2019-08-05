@@ -15,6 +15,7 @@ matplotlib = "*"
 torchtext = "*"
 pandas = "*"
 progress = "*"
+pytorch-transformers = "*"
 
 [requires]
 python_version = "3.6"
