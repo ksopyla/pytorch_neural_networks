@@ -105,4 +105,7 @@ predicted_token = tokenizer.convert_ids_to_tokens([predicted_index])[0]
 assert predicted_token == 'Marcin'
 
 top_k_predictions = torch.topk(predictions[0, masked_index],5)[1]
+top_k_predictions = top_k_predictions.cpu().numpy()
 
+top_k_tokens = tokenizer.convert_ids_to_tokens(top_k_predictions)
+print(top_k_tokens)
