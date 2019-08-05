@@ -7,6 +7,12 @@ import torch
 from pytorch_transformers import BertTokenizer, BertModel, BertForMaskedLM
 
 
+
+USE_GPU = 1
+# Device configuration
+device = torch.device('cuda' if (torch.cuda.is_available() and USE_GPU) else 'cpu')
+
+
 # Load pre-trained model tokenizer (vocabulary)
 
 # models: 'bert-base-uncased'
@@ -18,7 +24,7 @@ tokenizer = BertTokenizer.from_pretrained(pretrained_model)
 
 #%%
 # Tokenize input
-text = "[CLS] Who was Jim Henson ? [SEP] Jim Henson was a puppeteer [SEP]"
+
 text = '''Będąc młodym programistą (hoho), czytałem "Dziady" w 1983r. się. następnie(później) zrobiłem doktorat w 05.06.2018 roku a o 
 17:53 idę trenować. Kupiłem czarno-brązowy ciągnik. Po powrocie z USA gdzie  spotkałem Barack Obama w New York i zachód. Poszli razem w czwórkę 
 do sklepu i zobaczywszy kotem zrobili samochodem.
@@ -44,7 +50,7 @@ assert tokenized_text == ['[CLS]', 'Ja', 'i', 'Marcin', 'pos', '##zli', '##ś', 
 # Convert token to vocabulary indices
 indexed_tokens = tokenizer.convert_tokens_to_ids(tokenized_text)
 # Define sentence A and B indices associated to 1st and 2nd sentences (see paper)
-segments_ids = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,0,0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
+segments_ids = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,0,0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
 
 # Convert inputs to PyTorch tensors
 tokens_tensor = torch.tensor([indexed_tokens])
@@ -62,9 +68,9 @@ model = BertModel.from_pretrained(pretrained_model)
 model.eval()
 
 # If you have a GPU, put everything on cuda
-tokens_tensor = tokens_tensor.to('cuda')
-segments_tensors = segments_tensors.to('cuda')
-model.to('cuda')
+tokens_tensor = tokens_tensor.to(device)
+segments_tensors = segments_tensors.to(device)
+model.to(device)
 
 # Predict hidden states features for each layer
 with torch.no_grad():
@@ -84,9 +90,9 @@ model = BertForMaskedLM.from_pretrained(pretrained_model)
 model.eval()
 
 # If you have a GPU, put everything on cuda
-tokens_tensor = tokens_tensor.to('cuda')
-segments_tensors = segments_tensors.to('cuda')
-model.to('cuda')
+tokens_tensor = tokens_tensor.to(device)
+segments_tensors = segments_tensors.to(device)
+model.to(device)
 
 # Predict all tokens
 with torch.no_grad():
@@ -96,4 +102,7 @@ with torch.no_grad():
 # confirm we were able to predict 'henson'
 predicted_index = torch.argmax(predictions[0, masked_index]).item()
 predicted_token = tokenizer.convert_ids_to_tokens([predicted_index])[0]
-assert predicted_token == 'henson'
+assert predicted_token == 'Marcin'
+
+top_k_predictions = torch.topk(predictions[0, masked_index],5)[1]
+
