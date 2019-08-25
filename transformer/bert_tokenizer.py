@@ -115,7 +115,6 @@ segments_tensors = torch.tensor([segments_ids])
 tokens_tensor = tokens_tensor.to(device)
 segments_tensors = segments_tensors.to(device)
 
-
 # Predict all tokens
 with torch.no_grad():
     outputs = model(tokens_tensor, token_type_ids=segments_tensors)

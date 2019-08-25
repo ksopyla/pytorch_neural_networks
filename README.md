@@ -165,12 +165,57 @@ Epoch 59/60 loss=0.022030536144498795 acc=0.889423131942749 time=0:00:01.144795
 
 ```
 
-
 ## LSTM recurrent neural network for IMDB movie review sentiment analysis
+
+We build the LSTM network which will work on IMDB movie review text.
+
+The code shows you how to process input text with TorchText, build and train recurrent 1-layer LSTM.
+
+File: **[lstm_imdb.py](RNN/lstm_imdb.py)**
+
+This model achieves ~ 0.87 accuracy after 10 epoch.
+
+Sample output
+
+```
+Training Epoch 0/10 |################################| 391/391
+Validation Epoch 0/10 |################################| 391/391
+Epoch 0/10 loss=0.6549588166691763 acc=0.7202125787734985 time=0:10:02.022493
+Training Epoch 1/10 |################################| 391/391
+Validation Epoch 1/10 |################################| 391/391
+Epoch 1/10 loss=0.594817126422282 acc=0.6989369988441467 time=0:06:25.937583
+Training Epoch 2/10 |################################| 391/391
+Validation Epoch 2/10 |################################| 391/391
+Epoch 2/10 loss=0.5306539740556341 acc=0.7531969547271729 time=0:05:33.698079
+Training Epoch 3/10 |################################| 391/391
+Validation Epoch 3/10 |################################| 391/391
+Epoch 3/10 loss=0.439730473110438 acc=0.7545236349105835 time=0:03:51.911136
+Training Epoch 4/10 |################################| 391/391
+Validation Epoch 4/10 |################################| 391/391
+Epoch 4/10 loss=0.4551559637117264 acc=0.8277093768119812 time=0:04:08.334979
+Training Epoch 5/10 |################################| 391/391
+Validation Epoch 5/10 |################################| 391/391
+Epoch 5/10 loss=0.3437549231759727 acc=0.8208919167518616 time=0:03:45.663289
+Training Epoch 6/10 |################################| 391/391
+Validation Epoch 6/10 |################################| 391/391
+Epoch 6/10 loss=0.2964414275248947 acc=0.8551790118217468 time=0:03:45.582308
+Training Epoch 7/10 |################################| 391/391
+Validation Epoch 7/10 |################################| 391/391
+Epoch 7/10 loss=0.30815188632444346 acc=0.8564338684082031 time=0:04:18.328589
+Training Epoch 8/10 |################################| 391/391
+Validation Epoch 8/10 |################################| 391/391
+Epoch 8/10 loss=0.2521923514430785 acc=0.8667998909950256 time=0:03:44.280257
+Training Epoch 9/10 |################################| 391/391
+Validation Epoch 9/10 |################################| 391/391
+Epoch 9/10 loss=0.2135891618821627 acc=0.8684223294258118 time=0:03:40.475379
+```
+
+
+## LSTM with TBTT recurrent neural network for IMDB movie review sentiment analysis
 
 We build the LSTM network which will work on IMDB movie review text. This time we want to classify long text and show how to train recurrent network with use [Truncated Backpropagation through Time](https://machinelearningmastery.com/gentle-introduction-backpropagation-time/). This technique helps deal with vanishing and exploding gradients with very long sequences (long text, long amino sequence, time series). We will split gradient chain and do backpropagation every K-steps backward.
 
-This example was coded based on suggestion in this Pytorch forum threads:
+This example was coded based on suggestions from Pytorch forum threads:
 
 * [Implementing Truncated Backpropagation Through Time
 ](https://discuss.pytorch.org/t/implementing-truncated-backpropagation-through-time/15500)
@@ -182,6 +227,18 @@ The code shows you how to process input text with TorchText, build and train rec
 
 File: **[lstm_imdb_tbptt.py](RNN/lstm_imdb_tbptt.py)**
 
+Model params:
+
+```
+bptt=50
+batch_size = 64
+#hidden size
+n_hid=256
+# embed size
+n_embed=100
+# number of layers
+n_layers=1
+```
 This model achieves ~ 0.85 accuracy after 10 epoch.
 
 Sample output
