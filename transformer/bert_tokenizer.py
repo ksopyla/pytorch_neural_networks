@@ -8,7 +8,7 @@ from pytorch_transformers import BertTokenizer, BertModel, BertForMaskedLM
 
 
 
-USE_GPU = 1
+USE_GPU = 0
 # Device configuration
 device = torch.device('cuda' if (torch.cuda.is_available() and USE_GPU) else 'cpu')
 

@@ -11,6 +11,7 @@ pylint = "*"
 autopep8 = "*"
 rope = "*"
 jupyter = "*"
+black = "*"
 
 [packages]
 matplotlib = "*"
@@ -20,3 +21,6 @@ torch = "*"
 torchtext = "*"
 torchvision = "*"
 pytorch-transformers = "*"
+
+[pipenv]
+allow_prereleases = true
